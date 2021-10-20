@@ -1,0 +1,4 @@
+fail: "订单创建失败,请重试..."
+no-permission: "你没有使用此命令的权限"
+reload: "重载完成"
+input-error: "请输入正确的数字"
