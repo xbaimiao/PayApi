@@ -2,6 +2,7 @@ plugins {
     java
     id("io.izzel.taboolib") version "1.30"
     id("org.jetbrains.kotlin.jvm") version "1.5.10"
+    `maven-publish`
 }
 
 taboolib {
@@ -40,7 +41,7 @@ dependencies {
     taboo("com.google.zxing:core:3.4.1")
     compileOnly("ink.ptms.core:v11701:11701:mapped")
     compileOnly("ink.ptms.core:v11701:11701:universal")
-    compileOnly(kotlin("stdlib"))
+    compileOnly("org.jetbrains.kotlin:kotlin-stdlib:1.5.31")
     compileOnly(fileTree("libs"))
 }
 
@@ -59,4 +60,39 @@ tasks.jar {
     exclude("META-INF/NOTICE")
     exclude("META-INF/versions/11/module-info.class")
     exclude("META-INF/NOTICE.txt")
+}
+
+publishing {
+    repositories {
+        maven("https://www.xbaimiao.com/repository/maven-releases/") {
+            credentials {
+                username = project.findProperty("user").toString()
+                password = project.findProperty("password").toString()
+            }
+            authentication {
+                create<BasicAuthentication>("basic")
+            }
+        }
+    }
+    publications {
+        create<MavenPublication>("maven") {
+            from(components["java"])
+            groupId = "org.serverct"
+        }
+//        create<MavenPublication>("maven") {
+//            artifactId = "payapi"
+//            groupId = "org.serverct"
+//            version = project.version.toString()
+//            println("> version $version")
+//            file("$buildDir/libs").listFiles()?.forEach { file ->
+//                if (file.name.endsWith(".jar")) {
+//                    artifact(file) {
+//                        classifier = if (file.name.contains("all")) "all" else ""
+////                            file.name.toLowerCase().replace("payapi-$version", "").replace(".jar", "").replace("-", "")
+//                        println("> module $classifier (${file.name})")
+//                    }
+//                }
+//            }
+//        }
+    }
 }
